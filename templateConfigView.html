@@ -1,0 +1,61 @@
+<div style="flex: 1;">
+
+    <div class="input-fields">
+        <div>
+            <label for="select">Latitude Key</label>
+        </div>
+        <div class="field-options">
+            <select name="" id="longitudeKeySelect">
+                ` + keys.map((key) => `<option value="${key}" ${key===this.config.titleKey ? 'selected' : '' }>${key}
+                </option>`).join("") + `
+            </select>
+        </div>
+    </div>
+
+    <div class="input-fields">
+        <div>
+            <label for="select">Latitude Key</label>
+        </div>
+        <div class="field-options">
+            <select name="" id="longitudeKeySelect">
+                <option value="test1">1</option>
+                <option value="test1">2</option>
+                <option value="test1">3</option>
+            </select>
+        </div>
+    </div>
+
+    <div style="margin-top: 8px;">
+        <button id="saveButton">Save View</button>
+    </div>
+</div>
+
+<style>
+    .input-fields {
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+
+    label {
+        color: #111827;
+    }
+
+    .field-options {
+        margin-top: 10px;
+    }
+
+    select {
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid #cfcfcf;
+        width: 100%;
+    }
+
+    #saveButton {
+        margin-top: 8px;
+        padding: 4px 8px;
+        border-radius: 8px;
+        border: 1px solid #111827;
+    }
+</style>
