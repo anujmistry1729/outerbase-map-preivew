@@ -1,22 +1,26 @@
 export class OuterbasePluginConfig_$PLUGIN_ID {
-    imageKey = undefined
-    titleKey = undefined
-    descriptionKey = undefined
-    subtitleKey = undefined
+    // Meta data from Outerbase for us to retain
+
+    tableValue = undefined;
+    count = 0;
+    page = 1;
+    offset = 50;
+    theme = "light";
+
+    //Input from the configuration
+    latitudeKey = undefined;
+    longitudeKey = undefined;
+
 
     constructor(object) {
-        this.imageKey = object?.imageKey
-        this.titleKey = object?.titleKey
-        this.descriptionKey = object?.descriptionKey
-        this.subtitleKey = object?.subtitleKey
+        this.latitudeKey = object?.latitudeKey;
+        this.longitudeKey = object?.longitudeKey;
     }
 
     toJSON() {
         return {
-            "imageKey": this.imageKey,
-            "titleKey": this.titleKey,
-            "descriptionKey": this.descriptionKey,
-            "subtitleKey": this.subtitleKey
+            "latitudeKey": this.latitudeKey,
+            "longitudeKey": this.longitudeKey,
         }
     }
 }

@@ -80,7 +80,7 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
                 </div>
                 <div class="field-options">
                     <select name="" id="longitudeKeySelect">
-                        ` + keys.map((key) => `<option value="${key}" ${key===this.config.titleKey ? 'selected' : '' }>${key}
+                        ` + keys.map((key) => `<option value="${key}" ${key===this.config.latitudeKey ? 'selected' : '' }>${key}
                         </option>`).join("") + `
                     </select>
                 </div>
@@ -92,7 +92,7 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
                 </div>
                 <div class="field-options">
                     <select name="" id="latitudeKeySelect">
-                    ` + keys.map((key) => `<option value="${key}" ${key===this.config.titleKey ? 'selected' : '' }>${key}
+                    ` + keys.map((key) => `<option value="${key}" ${key===this.config.longitudeKey ? 'selected' : '' }>${key}
                     </option>`).join("") + `
                     </select>
                 </div>
