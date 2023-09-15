@@ -1,6 +1,5 @@
 import { OuterbasePluginConfig_$PLUGIN_ID } from "../config";
 import { templateConfiguration } from "./view/config-view";
-
 export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
   static get observedAttributes() {
     return privileges;
@@ -12,9 +11,6 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
   constructor() {
     super();
 
-    // The shadow DOM is a separate DOM tree that is attached to the element.
-    // This allows us to encapsulate our styles and markup. It also prevents
-    // styles from the parent page from leaking into our plugin.
     this.shadow = this.attachShadow({ mode: "open" });
     this.shadow.appendChild(templateConfiguration.content.cloneNode(true));
   }
@@ -32,14 +28,27 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
     }
 
     // Manually render dynamic content
+    // and store it in the `config` property.
+    this.config = new OuterbasePluginConfig_$PLUGIN_ID(
+      JSON.parse(this.getAttribute("configuration"))
+    );
+
+    // Set the items property to the value of the `tableValue` attribute.
+    if (this.getAttribute("tableValue")) {
+      this.items = JSON.parse(this.getAttribute("tableValue"));
+    }
+
+    // Manually render dynamic content
     this.render();
   }
+
+
 
   render() {
     let sample = this.items.length ? this.items[0] : {};
     let keys = Object.keys(sample);
 
-    this.shadow.querySelector("#container").innerHTML =
+    this.shadow.querySelector("#configuration-container").innerHTML =
       `
       
             <style>
@@ -50,7 +59,7 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
             }
 
             label {
-                color: #111827;
+                color: #777;
             }
 
             .field-options {
@@ -102,15 +111,44 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
                 <button id="saveButton">Save View</button>
             </div>
         </div>
+
+
+
+
+        <div style="position: relative;">
+            <div class="preview-card">
+
+                <div>
+                    <p style="margin-bottom: 8px; font-weight: bold; font-size: 16px; line-height: 24px; font-family: 'Inter', sans-serif;">${sample[this.config.latitudeKey]}</p>
+                    <p style="margin-bottom: 8px; font-size: 14px; line-height: 21px; font-weight: 400; font-family: 'Inter', sans-serif;">${sample[this.config.longitudeKey]}</p>
+                </div>
+            </div>
+        </div>
         `;
 
     var saveButton = this.shadow.getElementById("saveButton");
     saveButton.addEventListener("click", () => {
+      console.log("save button");
+      
       this.callCustomEvent({
         action: "onsave",
         value: this.config.toJSON(),
       });
     });
+
+
+    var latitudeKeySelect = this.shadow.getElementById("latitudeKeySelect");
+    latitudeKeySelect.addEventListener("change", ()=>{
+      this.config.latitudeKey = latitudeKeySelect.value;
+      this.render();
+    });
+
+    var longitudeKeySelect = this.shadow.getElementById("longitudeKeySelect");
+    longitudeKeySelect.addEventListener("change", ()=>{
+      this.config.longitudeKey = longitudeKeySelect.value;
+      this.render();
+    })
+
   }
 
   callCustomEvent(data) {
