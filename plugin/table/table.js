@@ -13,29 +13,21 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
     constructor() {
         super()
 
-        this.shadow = this.attachShadow({ mode: 'open' })
+        this.shadow = this.attachShadow({ mode: 'open' });
         this.shadow.appendChild(templateTable_$PLUGIN_ID.content.cloneNode(true))
     }
 
     connectedCallback() {
 
-        // this.loadExternalCSSLink("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css").then(
-        //     ()=>{
-        //         this.loadExternalScript("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js").then(
-        //             ()=>{
-        //                 this.useExternalScript()
-        //             }
-        //         ).catch((error) => {
-        //             console.error('Error loading external script:', error);
-        //         });
-        //     }
-        // ).catch((error) => {
-        //     console.error('Error loading external script:', error);
-        // });
+                this.loadExternalScript("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js").then(
+                    ()=>{
+                        this.useExternalScript()
+                    }
+                ).catch((error) => {
+                    console.error('Error loading external script:', error);
+                });
 
-        this.loadExternalScript("https://cdn.tailwindcss.com").catch((error) => {
-            console.error('Error loading external script:', error);
-        });
+
     }
 
     loadExternalScript(url) {
