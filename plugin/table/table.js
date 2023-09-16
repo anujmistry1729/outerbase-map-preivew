@@ -7,7 +7,8 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
         return privileges
     }
 
-    config = new OuterbasePluginConfig_$PLUGIN_ID({})
+    //assign global configuration to config property 
+    config = new OuterbasePluginConfig_$PLUGIN_ID(JSON.parse(this.getAttribute("configuration")));
     items = []
 
     constructor() {
@@ -18,6 +19,8 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
     }
 
     connectedCallback() {
+
+                this.config.tableValue = JSON.parse(this.getAttribute("tableValue"));
 
                 this.loadExternalScript("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js").then(
                     ()=>{
@@ -73,5 +76,9 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(e);
+    }
+
+    filterConfigurationValues(){
+        
     }
 }
