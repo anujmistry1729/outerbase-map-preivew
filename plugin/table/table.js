@@ -76,9 +76,29 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(e);
+
+        let markersGroupArray = this.getMarkers(L);
+        
+        
+        if(markersGroupArray.length && markersGroupArray.length > 0){
+            L.featureGroup(markersGroupArray).addTo(e)
+        }
     }
 
-    filterConfigurationValues(){
-        
+    getMarkers(L){
+        const tableValue = this.config.tableValue;
+
+        if(tableValue.length && tableValue.length != 0){
+            let myIcon = L.icon({
+                iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+            })
+            return tableValue.map((singleColumnValues, index)=>{
+                let lat = singleColumnValues[this.config.latitudeKey];
+                let lng = singleColumnValues[this.config.latitudeKey];
+                return new L.marker([lat, lng], {icon: myIcon}).bindPopup(`${index}, ${lat}, ${lng}`);
+            })
+        }else{
+            return [];
+        }
     }
 }
