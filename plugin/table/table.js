@@ -1,7 +1,6 @@
 import { OuterbasePluginConfig_$PLUGIN_ID } from '../config';
 import { templateTable_$PLUGIN_ID } from './view/table-view';
-
-
+import * as L from 'leaflet';
 export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
     static get observedAttributes() {
         return privileges
@@ -22,13 +21,13 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
 
                 this.config.tableValue = JSON.parse(this.getAttribute("tableValue"));
 
-                this.loadExternalScript("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js").then(
-                    ()=>{
+                // this.loadExternalScript("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js").then(
+                //     ()=>{
                         this.useExternalScript()
-                    }
-                ).catch((error) => {
-                    console.error('Error loading external script:', error);
-                });
+                    // }
+                // ).catch((error) => {
+                //     console.error('Error loading external script:', error);
+                // });
 
 
     }
@@ -68,8 +67,9 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
     useExternalScript() {
 
         var map = this.shadowRoot.getElementById('map');
+        var e =L.map(map).setView([51.505, -.09], 13);
 
-        var e = L.map(map).setView([51.505, -.09], 13);
+        L.markerClusterGroup();
 
         // var e = L.map("map-to-render").setView([51.505, -.09], 13);
         L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -95,7 +95,7 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
             return tableValue.map((singleColumnValues, index)=>{
                 let lat = singleColumnValues[this.config.latitudeKey];
                 let lng = singleColumnValues[this.config.latitudeKey];
-                return new L.marker([lat, lng], {icon: myIcon}).bindPopup(`${index}, ${lat}, ${lng}`);
+                return new L.marker([lat, lng]).bindPopup(`${index}, ${lat}, ${lng}`);
             })
         }else{
             return [];
