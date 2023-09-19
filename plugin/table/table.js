@@ -1,6 +1,6 @@
 import { OuterbasePluginConfig_$PLUGIN_ID } from '../config';
 import { templateTable_$PLUGIN_ID } from './view/table-view';
-import * as L from 'leaflet';
+import  { Map, tileLayer, featureGroup, icon} from 'leaflet';
 export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
     static get observedAttributes() {
         return privileges
@@ -67,12 +67,12 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
     useExternalScript() {
 
         var map = this.shadowRoot.getElementById('map');
-        var e =L.map(map).setView([51.505, -.09], 13);
+        var e =Map(map).setView([51.505, -.09], 13);
 
-        L.markerClusterGroup();
+        // L.markerClusterGroup();
 
         // var e = L.map("map-to-render").setView([51.505, -.09], 13);
-        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(e);
@@ -81,7 +81,7 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
         
         
         if(markersGroupArray.length && markersGroupArray.length > 0){
-            L.featureGroup(markersGroupArray).addTo(e)
+            featureGroup(markersGroupArray).addTo(e)
         }
     }
 
@@ -89,7 +89,7 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
         const tableValue = this.config.tableValue;
 
         if(tableValue.length && tableValue.length != 0){
-            let myIcon = L.icon({
+            let myIcon = icon({
                 iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
             })
             return tableValue.map((singleColumnValues, index)=>{
