@@ -1,5 +1,6 @@
 import { OuterbasePluginConfig_$PLUGIN_ID } from "../config";
 import { templateConfiguration } from "./view/config-view";
+import {map, tileLayer, icon , featureGroup, marker} from 'leaflet';
 export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
   static get observedAttributes() {
     return privileges;
@@ -36,6 +37,8 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
   render() {
     let sample = this.items.length ? this.items[0] : {};
     let keys = Object.keys(sample);
+    let lat = sample[this.config.latitudeKey];
+    let lng = sample[this.config.longitudeKey];
 
     this.shadow.querySelector("#configuration-container").innerHTML =
       `
@@ -69,6 +72,10 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
                 border-radius: 8px;
                 border: 1px solid #111827;
             }
+
+            #preview-map{
+              height: 185px;
+            }
             </style>
 
             <div style="flex: 1;">
@@ -96,6 +103,15 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
                     </select>
                 </div>
             </div>
+
+            <div class="input-fields">
+              <div>
+                  <label for="icon-img"> Icon Image </label>
+              </div>
+              <div>
+                  <input type="url">
+              </div>
+            </div>
         
             <div style="margin-top: 8px;">
                 <button id="saveButton">Save View</button>
@@ -109,13 +125,26 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
             <div class="preview-card">
 
                 <div>
-                    <p style="margin-bottom: 8px; font-weight: bold; font-size: 16px; line-height: 24px; font-family: 'Inter', sans-serif;">${sample[this.config.latitudeKey]}</p>
-                    <p style="margin-bottom: 8px; font-size: 14px; line-height: 21px; font-weight: 400; font-family: 'Inter', sans-serif;">${sample[this.config.longitudeKey]}</p>
+                    <div id="preview-map"></div>
                 </div>
             </div>
         </div>
         `;
 
+    let previewMapElement = this.shadowRoot.getElementById('preview-map');
+    
+    let previewMap = map(previewMapElement).setView([lat, lng], 10)
+
+    tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(previewMap);
+
+    let myIcon = icon({
+      iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+  })
+    marker([lat, lng], {icon: myIcon}).bindPopup(`${lat}, ${lng}`).addTo(previewMap)
+    
     var saveButton = this.shadow.getElementById("saveButton");
     saveButton.addEventListener("click", () => {
       console.log("save button");
@@ -149,5 +178,9 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
     });
 
     this.dispatchEvent(event);
+  }
+
+  renderMap(){
+
   }
 }
