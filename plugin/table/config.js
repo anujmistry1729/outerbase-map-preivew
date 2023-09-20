@@ -28,17 +28,6 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
     }
 
     // Manually render dynamic content
-    // and store it in the `config` property.
-    this.config = new OuterbasePluginConfig_$PLUGIN_ID(
-      JSON.parse(this.getAttribute("configuration"))
-    );
-
-    // Set the items property to the value of the `tableValue` attribute.
-    if (this.getAttribute("tableValue")) {
-      this.items = JSON.parse(this.getAttribute("tableValue"));
-    }
-
-    // Manually render dynamic content
     this.render();
   }
 
