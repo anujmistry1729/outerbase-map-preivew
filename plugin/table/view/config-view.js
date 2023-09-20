@@ -1,3 +1,5 @@
+const { LEAFLET_JS_CSS } = require("../../dependency/leaflet-css")
+
 var templateConfiguration = document.createElement('template')
 templateConfiguration.innerHTML = `
 <style>
@@ -98,6 +100,8 @@ templateConfiguration.innerHTML = `
         color: white !important;
         background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="28" viewBox="0 -960 960 960" width="32"><path fill="white" d="M480-380 276-584l16-16 188 188 188-188 16 16-204 204Z"/></svg>');
     }
+
+    ${LEAFLET_JS_CSS}
 </style>
 
 <div id="theme-container">
