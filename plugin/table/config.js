@@ -133,7 +133,7 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
 
     let previewMapElement = this.shadowRoot.getElementById('preview-map');
     
-    let previewMap = renderMapSingleLatLng(previewMapElement,'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png', lat, lng);
+    let previewMap = renderMapSingleLatLng(previewMapElement, lat, lng);
     
     var saveButton = this.shadow.getElementById("saveButton");
     saveButton.addEventListener("click", () => {
