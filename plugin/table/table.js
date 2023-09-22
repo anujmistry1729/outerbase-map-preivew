@@ -1,7 +1,7 @@
 import { OuterbasePluginConfig } from '../config';
 import { ATTRIBUTION, ICON_URL, MAX_ZOOM_LEVEL, TILE_LAYER } from '../constant';
 import { templateTable } from './view/table-view';
-import  { Map, tileLayer, icon, featureGroup, marker} from 'leaflet';
+import  { Map, tileLayer, icon, featureGroup, marker, Layer, control} from 'leaflet';
 export class OuterbasePluginTable extends HTMLElement {
     static get observedAttributes() {
         return privileges
@@ -40,14 +40,13 @@ export class OuterbasePluginTable extends HTMLElement {
             attribution: ATTRIBUTION 
         }).addTo(renderMap);
 
-        let markersGroupArray = this.getMarkersFromTableValue();
-        featureGroup(markersGroupArray).addTo(renderMap)
+        this.renderMarkers(renderMap)
         // if(markersGroupArray.length && markersGroupArray.length > 0){
         //     featureGroup(markersGroupArray).addTo(renderMap)
         // }
     }
 
-    getMarkersFromTableValue(){
+    renderMarkers(map){
         const tableValue = this.config.tableValue;
 
         if(tableValue.length && tableValue.length != 0){
@@ -58,7 +57,7 @@ export class OuterbasePluginTable extends HTMLElement {
             return tableValue.map((singleColumnValues, index)=>{
                 let lat = singleColumnValues[this.config.latitudeKey];
                 let lng = singleColumnValues[this.config.longitudeKey];
-                return marker([lat, lng], {icon : myIcon}).bindPopup(`${singleColumnValues.id}, ${lat}, ${lng}`);
+                return marker([lat, lng], {icon : myIcon}).bindPopup(`${singleColumnValues.id}, ${lat}, ${lng}`).addTo(map);
             })
         }else{
             return [];
