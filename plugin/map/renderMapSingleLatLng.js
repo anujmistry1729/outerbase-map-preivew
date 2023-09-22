@@ -1,12 +1,13 @@
 import {map, tileLayer, icon , featureGroup, marker} from 'leaflet';
+import { ATTRIBUTION, ICON_URL, TILE_LAYER } from '../constant';
 
 
-export function renderMapSingleLatLng(mapEl, iconUrl, lat, lng){
+export function renderMapSingleLatLng(mapEl, iconUrl = ICON_URL, lat, lng){
     let previewMap = map(mapEl).setView([lat, lng], 10)
 
-    tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    tileLayer(TILE_LAYER, {
       maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      attribution: ATTRIBUTION
     }).addTo(previewMap);
 
     let myIcon = icon({

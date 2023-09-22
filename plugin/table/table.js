@@ -1,6 +1,7 @@
 import { OuterbasePluginConfig_$PLUGIN_ID } from '../config';
+import { ATTRIBUTION, ICON_URL, MAX_ZOOM_LEVEL, TILE_LAYER } from '../constant';
 import { templateTable_$PLUGIN_ID } from './view/table-view';
-import  { Map, Marker, tileLayer, FeatureGroup, icon, featureGroup, marker} from 'leaflet';
+import  { Map, tileLayer, icon, featureGroup, marker} from 'leaflet';
 export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
     static get observedAttributes() {
         return privileges
@@ -29,9 +30,9 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
         var map = this.shadowRoot.getElementById('map');
         var renderMap =new Map(map).setView([51.505, -.09], 13);
 
-        tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        tileLayer(TILE_LAYER, {
+            maxZoom: MAX_ZOOM_LEVEL,
+            attribution: ATTRIBUTION 
         }).addTo(renderMap);
 
         let markersGroupArray = this.getMarkersFromTableValue();
@@ -47,7 +48,7 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
         if(tableValue.length && tableValue.length != 0){
             // TODO ADD CUSTOM ICON SUPPORT
             let myIcon = icon({
-                iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+                iconUrl: ICON_URL,
             })
             return tableValue.map((singleColumnValues, index)=>{
                 let lat = singleColumnValues[this.config.latitudeKey];
