@@ -21,14 +21,19 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
     connectedCallback() {
 
                 this.config.tableValue = JSON.parse(this.getAttribute("tableValue"));
+                this.config.items = this.config.tableValue;
                 this.useExternalScript()
 
 
     }
     useExternalScript() {
+        const firstRowData = this.config.tableValue[0];
+        const latValue = firstRowData[this.config.latitudeKey];
+        const lngValue = firstRowData[this.config.longitudeKey];
+
 
         var map = this.shadowRoot.getElementById('map');
-        var renderMap =new Map(map).setView([51.505, -.09], 13);
+        var renderMap =new Map(map).setView([latValue, lngValue], 13);
 
         tileLayer(TILE_LAYER, {
             maxZoom: MAX_ZOOM_LEVEL,
@@ -52,8 +57,8 @@ export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
             })
             return tableValue.map((singleColumnValues, index)=>{
                 let lat = singleColumnValues[this.config.latitudeKey];
-                let lng = singleColumnValues[this.config.latitudeKey];
-                return marker([lat, lng], {icon : myIcon}).bindPopup(`${index}, ${lat}, ${lng}`);
+                let lng = singleColumnValues[this.config.longitudeKey];
+                return marker([lat, lng], {icon : myIcon}).bindPopup(`${singleColumnValues.id}, ${lat}, ${lng}`);
             })
         }else{
             return [];
