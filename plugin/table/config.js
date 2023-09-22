@@ -1,6 +1,6 @@
 import { OuterbasePluginConfig_$PLUGIN_ID } from "../config";
+import { renderMapSingleLatLng } from "../map/renderMapSingleLatLng";
 import { templateConfiguration } from "./view/config-view";
-import {map, tileLayer, icon , featureGroup, marker} from 'leaflet';
 export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
   static get observedAttributes() {
     return privileges;
@@ -104,14 +104,14 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
                 </div>
             </div>
 
-            <div class="input-fields">
+            <!-- <div class="input-fields">
               <div>
                   <label for="icon-img"> Icon Image </label>
               </div>
               <div>
                   <input type="url">
               </div>
-            </div>
+            </div> -->
         
             <div style="margin-top: 8px;">
                 <button id="saveButton">Save View</button>
@@ -133,17 +133,7 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
 
     let previewMapElement = this.shadowRoot.getElementById('preview-map');
     
-    let previewMap = map(previewMapElement).setView([lat, lng], 10)
-
-    tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(previewMap);
-
-    let myIcon = icon({
-      iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  })
-    marker([lat, lng], {icon: myIcon}).bindPopup(`${lat}, ${lng}`).addTo(previewMap)
+    let previewMap = renderMapSingleLatLng(previewMapElement,'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png', lat, lng);
     
     var saveButton = this.shadow.getElementById("saveButton");
     saveButton.addEventListener("click", () => {
@@ -180,7 +170,4 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
     this.dispatchEvent(event);
   }
 
-  renderMap(){
-
-  }
 }
