@@ -1,21 +1,21 @@
-import { OuterbasePluginConfig_$PLUGIN_ID } from '../config';
+import { OuterbasePluginConfig } from '../config';
 import { ATTRIBUTION, ICON_URL, MAX_ZOOM_LEVEL, TILE_LAYER } from '../constant';
-import { templateTable_$PLUGIN_ID } from './view/table-view';
+import { templateTable } from './view/table-view';
 import  { Map, tileLayer, icon, featureGroup, marker} from 'leaflet';
-export class OuterbasePluginTable_$PLUGIN_ID extends HTMLElement {
+export class OuterbasePluginTable extends HTMLElement {
     static get observedAttributes() {
         return privileges
     }
 
     //assign global configuration to config property 
-    config = new OuterbasePluginConfig_$PLUGIN_ID(JSON.parse(this.getAttribute("configuration")));
+    config = new OuterbasePluginConfig(JSON.parse(this.getAttribute("configuration")));
     items = []
 
     constructor() {
         super()
 
         this.shadow = this.attachShadow({ mode: 'open' });
-        this.shadow.appendChild(templateTable_$PLUGIN_ID.content.cloneNode(true))
+        this.shadow.appendChild(templateTable.content.cloneNode(true))
     }
 
     connectedCallback() {

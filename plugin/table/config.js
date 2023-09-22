@@ -1,12 +1,12 @@
-import { OuterbasePluginConfig_$PLUGIN_ID } from "../config";
+import { OuterbasePluginConfig } from "../config";
 import { renderMapSingleLatLng } from "../map/renderMapSingleLatLng";
 import { templateConfiguration } from "./view/config-view";
-export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
+export class OuterbasePluginTableConfiguration extends HTMLElement {
   static get observedAttributes() {
     return privileges;
   }
 
-  config = new OuterbasePluginConfig_$PLUGIN_ID({});
+  config = new OuterbasePluginConfig({});
   items = [];
 
   constructor() {
@@ -19,7 +19,7 @@ export class OuterbasePluginTableConfiguration_$PLUGIN_ID extends HTMLElement {
   connectedCallback() {
     // Parse the configuration object from the `configuration` attribute
     // and store it in the `config` property.
-    this.config = new OuterbasePluginConfig_$PLUGIN_ID(
+    this.config = new OuterbasePluginConfig(
       JSON.parse(this.getAttribute("configuration"))
     );
 

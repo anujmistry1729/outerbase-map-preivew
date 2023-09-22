@@ -1,8 +1,8 @@
 const { LEAFLET_JS_CSS } = require("../../dependency/leaflet-css");
 
-var templateTable_$PLUGIN_ID = document.createElement("template");
+var templateTable = document.createElement("template");
 
-templateTable_$PLUGIN_ID.innerHTML =`
+templateTable.innerHTML =`
 <style>
     .leaflet-control-zoom{display:none}
     ${LEAFLET_JS_CSS}
@@ -16,4 +16,4 @@ templateTable_$PLUGIN_ID.innerHTML =`
 `;
 
 
-module.exports = { templateTable_$PLUGIN_ID };
+module.exports = { templateTable };

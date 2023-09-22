@@ -1,4 +1,4 @@
-export class OuterbasePluginConfig_$PLUGIN_ID {
+export class OuterbasePluginConfig {
     // Meta data from Outerbase for us to retain
 
     tableValue = undefined;
