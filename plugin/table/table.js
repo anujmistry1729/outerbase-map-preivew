@@ -1,10 +1,13 @@
 import { OuterbasePluginConfig } from '../config';
-import { ATTRIBUTION, ICON_URL, MAX_ZOOM_LEVEL, TILE_LAYER } from '../constant';
+import { ATTRIBUTION, ICON_URL, MAX_ZOOM_LEVEL, TILE_LAYER, observableAttributes } from '../constant';
+import { OuterbaseTableEvent } from '../outerbase-events';
 import { templateTable } from './view/table-view';
 import  { Map, tileLayer, icon, featureGroup, marker, Layer, control} from 'leaflet';
+
+
 export class OuterbasePluginTable extends HTMLElement {
     static get observedAttributes() {
-        return privileges
+        return observableAttributes;
     }
 
     //assign global configuration to config property 
@@ -17,13 +20,13 @@ export class OuterbasePluginTable extends HTMLElement {
         this.shadow = this.attachShadow({ mode: 'open' });
         this.shadow.appendChild(templateTable.content.cloneNode(true))
     }
-
-    connectedCallback() {
-
-                this.config.tableValue = JSON.parse(this.getAttribute("tableValue"));
-                this.config.items = this.config.tableValue;
-
-                this.render()
+        
+        connectedCallback() {
+            this.config = new OuterbasePluginConfig(JSON.parse(this.getAttribute("configuration")));
+            this.config.tableValue = JSON.parse(this.getAttribute('tableValue'));
+            this.config.items = this.config.tableValue;
+            this.config.page = this.items.length;
+        this.render()
     }
 
     render(){
@@ -38,10 +41,19 @@ export class OuterbasePluginTable extends HTMLElement {
         //Event Listeners for pagination
         previousPageButtonEl.addEventListener("click", (event)=>{
             console.log("Previous page button clicked");
+            this.triggerEvent(this, {
+                action: OuterbaseTableEvent.getPreviousPage,
+                value: {}
+            });        
         });
 
         nextPageButtonEl.addEventListener("click", (event)=>{
             console.log("Next page button clicked");
+
+            this.triggerEvent(this, {
+                action: OuterbaseTableEvent.getNextPage,
+                value: {}
+            })
         });
     }
     useExternalScript() {
@@ -81,5 +93,15 @@ export class OuterbasePluginTable extends HTMLElement {
 
     pagination(){
 
+    }
+     
+    triggerEvent = (fromClass, data) => {
+        const event = new CustomEvent("custom-change", {
+            detail: data,
+            bubbles: true,
+            composed: true
+        });
+    
+        fromClass.dispatchEvent(event);
     }
 }

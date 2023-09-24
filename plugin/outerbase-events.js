@@ -1,9 +1,9 @@
-var OuterbaseEvent = {
+const OuterbaseEvent = {
     // The user has triggered an action to save updates
     onSave: "onSave",
 }
 
-var OuterbaseColumnEvent = {
+const OuterbaseColumnEvent = {
     // The user has began editing the selected cell
     onEdit: "onEdit",
     // Stops editing a cells editor popup view and accept the changes
@@ -14,7 +14,7 @@ var OuterbaseColumnEvent = {
     updateCell: "updateCell",
 }
 
-var OuterbaseTableEvent = {
+const OuterbaseTableEvent = {
     // Updates the value of a row with the provided JSON value
     updateRow: "updateRow",
     // Deletes an entire row with the provided JSON value
