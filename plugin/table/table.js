@@ -22,9 +22,27 @@ export class OuterbasePluginTable extends HTMLElement {
 
                 this.config.tableValue = JSON.parse(this.getAttribute("tableValue"));
                 this.config.items = this.config.tableValue;
-                this.useExternalScript()
+
+                this.render()
+    }
+
+    render(){
+        this.useExternalScript();
 
 
+        const previousPageButtonEl = this.shadow.getElementById("previous-page-btn");
+        const nextPageButtonEl = this.shadow.getElementById("next-page-btn");
+        const currentPageEl = this.shadow.getElementById("current-page");
+
+
+        //Event Listeners for pagination
+        previousPageButtonEl.addEventListener("click", (event)=>{
+            console.log("Previous page button clicked");
+        });
+
+        nextPageButtonEl.addEventListener("click", (event)=>{
+            console.log("Next page button clicked");
+        });
     }
     useExternalScript() {
         const firstRowData = this.config.tableValue[0];
@@ -41,9 +59,6 @@ export class OuterbasePluginTable extends HTMLElement {
         }).addTo(renderMap);
 
         this.renderMarkers(renderMap)
-        // if(markersGroupArray.length && markersGroupArray.length > 0){
-        //     featureGroup(markersGroupArray).addTo(renderMap)
-        // }
     }
 
     renderMarkers(map){
@@ -62,5 +77,9 @@ export class OuterbasePluginTable extends HTMLElement {
         }else{
             return [];
         }
+    }
+
+    pagination(){
+
     }
 }
