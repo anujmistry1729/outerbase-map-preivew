@@ -46,22 +46,25 @@ export class OuterbasePluginTable extends HTMLElement {
     }
     useExternalScript() {
         const firstRowData = this.config.tableValue[0];
-        const latValue = firstRowData[this.config.latitudeKey];
-        const lngValue = firstRowData[this.config.longitudeKey];
 
-
-        var map = this.shadowRoot.getElementById('map');
-        var renderMap =new Map(map).setView([latValue, lngValue], 13);
+        var mapEl = this.shadowRoot.getElementById('map');
+        var renderMap =new Map(mapEl);
 
         tileLayer(TILE_LAYER, {
             maxZoom: MAX_ZOOM_LEVEL,
             attribution: ATTRIBUTION 
         }).addTo(renderMap);
 
-        this.renderMarkers(renderMap)
+        const markersArray = this.createMarkersFromTableData();
+
+        const markersGroup = featureGroup(markersArray);    
+
+        renderMap.fitBounds(markersGroup.getBounds());
+
+        markersGroup.addTo(renderMap)
     }
 
-    renderMarkers(map){
+    createMarkersFromTableData(){
         const tableValue = this.config.tableValue;
 
         if(tableValue.length && tableValue.length != 0){
@@ -72,7 +75,7 @@ export class OuterbasePluginTable extends HTMLElement {
             return tableValue.map((singleColumnValues, index)=>{
                 let lat = singleColumnValues[this.config.latitudeKey];
                 let lng = singleColumnValues[this.config.longitudeKey];
-                return marker([lat, lng], {icon : myIcon}).bindPopup(`${singleColumnValues.id}, ${lat}, ${lng}`).addTo(map);
+                return marker([lat, lng], {icon : myIcon}).bindPopup(`${singleColumnValues.id}, ${lat}, ${lng}`);
             })
         }else{
             return [];
