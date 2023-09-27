@@ -2,11 +2,13 @@ import { OuterbasePluginConfig } from '../config';
 import { ATTRIBUTION, ICON_URL, MAX_ZOOM_LEVEL, TILE_LAYER } from '../constant';
 import { OuterbaseTableEvent } from '../outerbase-events';
 import { templateTable } from './view/table-view';
-import  { Map, tileLayer, icon, featureGroup, marker} from 'leaflet';
+import { Map, tileLayer, icon, featureGroup, marker, popup } from 'leaflet';
 
 export class OuterbasePluginTable extends HTMLElement {
     static get observedAttributes() {
         return [
+            // The value of the table that the plugin is being rendered in
+            "tablevalue",
             // The configuration object that the user specified when installing the plugin
             "configuration",
             // Additional information about the view such as count, page and offset.
@@ -24,15 +26,23 @@ export class OuterbasePluginTable extends HTMLElement {
         this.shadow.appendChild(templateTable.content.cloneNode(true));
 
         const mapEl = this.shadowRoot.getElementById('map');
-        this.renderedMap =new Map(mapEl);
+        this.renderedMap = new Map(mapEl);
+
+        this.renderedMap.setView([0, 0], 2);
+
+        const continentsBoundingBox = [
+            [84, -180], // Northernmost point (latitude, longitude)
+            [-56, 180], // Southernmost point (latitude, longitude)
+        ];
+        this.renderedMap.fitBounds(continentsBoundingBox);
 
         tileLayer(TILE_LAYER, {
             maxZoom: MAX_ZOOM_LEVEL,
-            attribution: ATTRIBUTION 
+            attribution: ATTRIBUTION
         }).addTo(this.renderedMap);
-       
 
-
+        //init markers
+        this.markers = []
 
 
         //pagination
@@ -42,15 +52,15 @@ export class OuterbasePluginTable extends HTMLElement {
         this.pageInfoEl = this.shadow.getElementById("page-info")
 
 
-        this.previousPageButtonEl.addEventListener("click", (event)=>{
+        this.previousPageButtonEl.addEventListener("click", (event) => {
             console.log("Previous page button clicked");
             this.triggerEvent(this, {
                 action: OuterbaseTableEvent.getPreviousPage,
                 value: {}
-            });        
+            });
         });
 
-        this.nextPageButtonEl.addEventListener("click", (event)=>{
+        this.nextPageButtonEl.addEventListener("click", (event) => {
             console.log("Next page button clicked");
 
             this.triggerEvent(this, {
@@ -59,20 +69,20 @@ export class OuterbasePluginTable extends HTMLElement {
             })
         });
     }
-        
+
     connectedCallback() {
         this.render()
     }
 
 
-    attributeChangedCallback(name, oldValue, newValue){
+    attributeChangedCallback(name, oldValue, newValue) {
         console.log("attribute changed")
 
-        if(name === "configuration"){
+        if (name === "configuration") {
             this.config = new OuterbasePluginConfig(JSON.parse(this.getAttribute("configuration")));
         }
-        
-        if(name === "metadata"){
+
+        if (name === "metadata") {
             //get meta data
             let metadata = JSON.parse(this.getAttribute("metadata"));
             //pagination data
@@ -82,45 +92,84 @@ export class OuterbasePluginTable extends HTMLElement {
             this.config.theme = metadata?.theme
             this.config.pageCount = metadata?.pageCount
             this.config.page = metadata?.page
+
+            // if(this.config.pageCount === this.config.page){
+            //     this.cursorNotAllowed()
+            // }else{
+            //     this.nextPageButtonEl.style.cursor = 'pointer'
+            // }
+            // //Start page
+            // if(this.config.page === 1){
+            //     this.cursorNotAllowed()
+
+            // }else{
+            //     this.previousPageButtonEl.style.cursor = 'pointer';
+            // }
+        }
+
+        if (name === "tablevalue") {
+            this.clearMarkers();
+            this.addMarkers();
         }
 
         this.render()
     }
 
-    render(){
-        
-        const markersArray = this.createMarkersFromTableData();
+    render() {
 
-        const markersGroup = featureGroup(markersArray);    
-
-        this.renderedMap.fitBounds(markersGroup.getBounds());
-
-        markersGroup.addTo(this.renderedMap)
-
-
-        
         this.pageInfoEl.innerText = `Viewing ${this.config.offset} - ${this.config.limit} of ${this.config.count} results`;
 
         this.currentPageEl.innerText = `Page ${this.config.page} of ${this.config.pageCount}`;
 
     }
 
-    createMarkersFromTableData(){
-        const tableValue = JSON.parse(this.getAttribute('tableValue'));
+    // cursorNotAllowed(element){
+    //     element.style.pointerEvents = 'none';
+    // }
 
-        if(tableValue.length && tableValue.length != 0){
+    showNoMarkersPopup() {
+        const noMarkerPopup = popup().setLatLng(this.renderedMap.getCenter()).setContent('No markers to display');
+        noMarkerPopup.addTo(this.renderedMap);
+    }
+    //clear Markers
+    clearMarkers() {
+        this.markers.forEach(marker => {
+            marker.removeFrom(this.renderedMap);
+        });
+        this.markers = [];
+    }
+
+
+    //add Markers to Map
+    addMarkers() {
+        this.markers = this.createMarkersFromTableValue();
+
+        if (this.markers.length === 0) {
+            this.showNoMarkersPopup();
+        } else {
+            const markerGroup = featureGroup(this.markers);
+            markerGroup.addTo(this.renderedMap)
+        }
+    }
+
+    //create markers from table value
+    createMarkersFromTableValue() {
+        const tableValue = JSON.parse(this.getAttribute("tableValue"));
+
+        if (tableValue.length === 0) {
+            return [];
+        } else {
             // TODO ADD CUSTOM ICON SUPPORT
             let myIcon = icon({
                 iconUrl: ICON_URL,
             })
 
-            return tableValue.map((singleColumnValues, index)=>{
+            return tableValue.map((singleColumnValues, index) => {
                 let lat = singleColumnValues[this.config.latitudeKey];
                 let lng = singleColumnValues[this.config.longitudeKey];
-                return marker([lat, lng], {icon : myIcon}).bindPopup(`${singleColumnValues.id}, ${lat}, ${lng}`);
+                return marker([lat, lng], { icon: myIcon }).bindPopup(`${singleColumnValues.id}, ${lat}, ${lng}`);
             })
-        }else{
-            return [];
+
         }
     }
 
@@ -130,7 +179,7 @@ export class OuterbasePluginTable extends HTMLElement {
             bubbles: true,
             composed: true
         });
-    
+
         fromClass.dispatchEvent(event);
     }
 }
