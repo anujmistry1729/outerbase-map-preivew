@@ -17,13 +17,17 @@ const observableAttributes = [
     "configuration",
     // Additional information about the view such as count, page and offset.
     "metadata"
-]
-
+];
+const continentsBoundingBox = [
+    [84, -180], // Northernmost point (latitude, longitude)
+    [-56, 180], // Southernmost point (latitude, longitude)
+];
 
 module.exports = {
     TILE_LAYER,
     ATTRIBUTION,
     ICON_URL,
     MAX_ZOOM_LEVEL,
-    observableAttributes
+    observableAttributes,
+    continentsBoundingBox,
 }

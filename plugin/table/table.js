@@ -1,5 +1,5 @@
 import { OuterbasePluginConfig } from '../config';
-import { ATTRIBUTION, ICON_URL, MAX_ZOOM_LEVEL, TILE_LAYER } from '../constant';
+import { ATTRIBUTION, ICON_URL, MAX_ZOOM_LEVEL, TILE_LAYER, continentsBoundingBox } from '../constant';
 import { OuterbaseTableEvent } from '../outerbase-events';
 import { templateTable } from './view/table-view';
 import { Map, tileLayer, icon, featureGroup, marker, popup } from 'leaflet';
@@ -30,10 +30,6 @@ export class OuterbasePluginTable extends HTMLElement {
 
         this.renderedMap.setView([0, 0], 2);
 
-        const continentsBoundingBox = [
-            [84, -180], // Northernmost point (latitude, longitude)
-            [-56, 180], // Southernmost point (latitude, longitude)
-        ];
         this.renderedMap.fitBounds(continentsBoundingBox);
 
         tileLayer(TILE_LAYER, {
