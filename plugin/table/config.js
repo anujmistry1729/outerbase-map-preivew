@@ -25,6 +25,8 @@ export class OuterbasePluginTableConfiguration extends HTMLElement {
     let lat = sample[this.config.latitudeKey];
     let lng = sample[this.config.longitudeKey];
 
+    console.log(this.config)
+
     //get options for select tag 
     let latitudeKeyOptions =   ` + ${keys.map((key) => `<option value="${key}" ${key===this.config.latitudeKey ? 'selected' : '' }>${key}</option>`).join("")} + `;
     let longitudeKeyOptions = ` + ${keys.map((key) => `<option value="${key}" ${key===this.config.longitudeKey ? 'selected' : '' }>${key}</option>`).join("")} + `;
@@ -33,17 +35,13 @@ export class OuterbasePluginTableConfiguration extends HTMLElement {
     this.shadow.querySelector("#latitudeKeySelect").innerHTML =latitudeKeyOptions;
     this.shadow.querySelector("#longitudeKeySelect").innerHTML =longitudeKeyOptions;
 
-    //event listeners for capturing response
+    //Latitude Select
     const latitudeKeySelect = this.shadow.getElementById("latitudeKeySelect");
     latitudeKeySelect.addEventListener("change", ()=>{
 
       //validate latitude key sample value
       const latitudeLabelEl = this.shadow.querySelector("#latitude-label");
       latitudeLabelEl.innerHTML = 'Latitude Key';
-
-
-
-
       // if(latLongRegex.exec(sample[latitudeKeySelect.value])){
         this.config.latitudeKey = latitudeKeySelect.value;
       // }else{
@@ -53,18 +51,34 @@ export class OuterbasePluginTableConfiguration extends HTMLElement {
       this.render();
     });
 
-    //event listeners for capturing response
+    //Longitude Select
     const longitudeKeySelect = this.shadow.getElementById("longitudeKeySelect");
     longitudeKeySelect.addEventListener("change", ()=>{
       this.config.longitudeKey = longitudeKeySelect.value;
       this.render();
     })
 
-    //on save update config keys
+    //Clustering Toggle
+    const clusteringInput = this.shadow.querySelector("#is-clustering");
+
+    if(this.config.isClustering){
+      clusteringInput.checked = this.config.isClustering
+    }
+    clusteringInput.addEventListener("change", ()=>{
+      console.log(clusteringInput.checked)
+      if (clusteringInput.checked) {
+        this.config.isClustering = true;
+      } else{
+        this.config.isClustering = false;
+      }
+      this.render()
+    })
+
+    //save and update config keys
     const saveButton = this.shadow.getElementById("saveButton");
     saveButton.addEventListener("click", () => {
       console.log("save button");
-      
+      console.log(this.config.toJSON())
       this.callCustomEvent({
         action: "onsave",
         value: this.config.toJSON(),

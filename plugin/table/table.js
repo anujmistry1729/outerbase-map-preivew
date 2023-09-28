@@ -76,6 +76,7 @@ export class OuterbasePluginTable extends HTMLElement {
 
         if (name === "configuration") {
             this.config = new OuterbasePluginConfig(JSON.parse(this.getAttribute("configuration")));
+            console.log(this.config)
         }
 
         if (name === "metadata") {

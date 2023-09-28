@@ -9,21 +9,24 @@ export class OuterbasePluginConfig {
     offset = 0
     pageCount= 0
     theme = "light"
-
+    
     //Input from the configuration
     latitudeKey = undefined;
     longitudeKey = undefined;
+    isClustering = undefined;
 
 
     constructor(object) {
         this.latitudeKey = object?.latitudeKey;
         this.longitudeKey = object?.longitudeKey;
+        this.isClustering = object?.isClustering;
     }
 
     toJSON() {
         return {
             "latitudeKey": this.latitudeKey,
             "longitudeKey": this.longitudeKey,
+            "isClustering": this.isClustering
         }
     }
 }
