@@ -47,6 +47,7 @@ templateConfiguration.innerHTML = `
         color: black;
         font-size: 14px;
         padding: 0 8px;
+        color: #777;
     }
 
     button {
@@ -247,15 +248,6 @@ templateConfiguration.innerHTML = `
             </input>
         </div>
     </div>
-
-    <!-- <div class="input-fields">
-      <div>
-          <label for="icon-img"> Icon Image </label>
-      </div>
-      <div>
-          <input type="url">
-      </div>
-    </div> -->
 
     <div style="margin-top: 8px;">
         <button id="saveButton">Save View</button>
