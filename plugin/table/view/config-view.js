@@ -238,6 +238,16 @@ templateConfiguration.innerHTML = `
         </label>
     </div>
 
+    <div class="input-fields">
+        <div>
+            <label id="icon" for="icon">Custom Icon URL: OPTIONAL</label>
+        </div>
+        <div class="field-options">
+            <input name="icon" id="iconURL" type="url"  placeholder="https://icon-image.com" pattern="https://.*"/>
+            </input>
+        </div>
+    </div>
+
     <!-- <div class="input-fields">
       <div>
           <label for="icon-img"> Icon Image </label>
