@@ -1,141 +1,67 @@
+import {Map, tileLayer, icon , featureGroup, marker, popup} from 'leaflet';
+
 import { OuterbasePluginConfig } from "../config";
 import { renderMapSingleLatLng } from "../map/renderMapSingleLatLng";
 import { templateConfiguration } from "./view/config-view";
+import { ATTRIBUTION, MAX_ZOOM_LEVEL, TILE_LAYER, continentsBoundingBox } from '../constant';
 export class OuterbasePluginTableConfiguration extends HTMLElement {
   static get observedAttributes() {
     return privileges;
   }
 
-  config = new OuterbasePluginConfig({});
-  items = [];
+  config = new OuterbasePluginConfig(JSON.parse(this.getAttribute("configuration")));
+  items = JSON.parse(this.getAttribute("tableValue"));
 
   constructor() {
     super();
 
+    //attach shadow clone
     this.shadow = this.attachShadow({ mode: "open" });
     this.shadow.appendChild(templateConfiguration.content.cloneNode(true));
-  }
 
-  connectedCallback() {
-    // Parse the configuration object from the `configuration` attribute
-    // and store it in the `config` property.
-    this.config = new OuterbasePluginConfig(
-      JSON.parse(this.getAttribute("configuration"))
-    );
-
-    // Set the items property to the value of the `tableValue` attribute.
-    if (this.getAttribute("tableValue")) {
-      this.items = JSON.parse(this.getAttribute("tableValue"));
-    }
-
-    // Manually render dynamic content
-    this.render();
-  }
-
-
-
-  render() {
+    //get sample data for preview
     let sample = this.items.length ? this.items[0] : {};
     let keys = Object.keys(sample);
     let lat = sample[this.config.latitudeKey];
     let lng = sample[this.config.longitudeKey];
 
-    this.shadow.querySelector("#configuration-container").innerHTML =
-      `
+    //get options for select tag 
+    let latitudeKeyOptions =   ` + ${keys.map((key) => `<option value="${key}" ${key===this.config.latitudeKey ? 'selected' : '' }>${key}</option>`).join("")} + `;
+    let longitudeKeyOptions = ` + ${keys.map((key) => `<option value="${key}" ${key===this.config.longitudeKey ? 'selected' : '' }>${key}</option>`).join("")} + `;
+
+    //render options 
+    this.shadow.querySelector("#latitudeKeySelect").innerHTML =latitudeKeyOptions;
+    this.shadow.querySelector("#longitudeKeySelect").innerHTML =longitudeKeyOptions;
+
+    //event listeners for capturing response
+    const latitudeKeySelect = this.shadow.getElementById("latitudeKeySelect");
+    latitudeKeySelect.addEventListener("change", ()=>{
+
+      //validate latitude key sample value
+      const latitudeLabelEl = this.shadow.querySelector("#latitude-label");
+      latitudeLabelEl.innerHTML = 'Latitude Key';
+
+
+
+
+      // if(latLongRegex.exec(sample[latitudeKeySelect.value])){
+        this.config.latitudeKey = latitudeKeySelect.value;
+      // }else{
+      //   latitudeLabelEl.innerHTML += '<span style="color:red;"> Please select valid Latitude Key</span>'
+      // }
       
-            <style>
-            .input-fields {
-                display: flex;
-                flex-direction: column;
-                margin-top: 10px;
-            }
+      this.render();
+    });
 
-            label {
-                color: #777;
-            }
+    //event listeners for capturing response
+    const longitudeKeySelect = this.shadow.getElementById("longitudeKeySelect");
+    longitudeKeySelect.addEventListener("change", ()=>{
+      this.config.longitudeKey = longitudeKeySelect.value;
+      this.render();
+    })
 
-            .field-options {
-                margin-top: 10px;
-            }
-
-            select {
-                color: 	#A9A9A9;
-                padding: 8px 16px;
-                border-radius: 8px;
-                border: 1px solid #cfcfcf;
-                width: 100%;
-            }
-
-            #saveButton {
-                margin-top: 8px;
-                padding: 4px 8px;
-                border-radius: 8px;
-                border: 1px solid #111827;
-            }
-
-            #preview-map{
-              height: 185px;
-            }
-            </style>
-
-            <div style="flex: 1;">
-
-            <div class="input-fields">
-                <div>
-                    <label for="select">Longitude Key</label>
-                </div>
-                <div class="field-options">
-                    <select name="" id="longitudeKeySelect">
-                        ` + keys.map((key) => `<option value="${key}" ${key===this.config.latitudeKey ? 'selected' : '' }>${key}
-                        </option>`).join("") + `
-                    </select>
-                </div>
-            </div>
-        
-            <div class="input-fields">
-                <div>
-                    <label for="select">Latitude Key</label>
-                </div>
-                <div class="field-options">
-                    <select name="" id="latitudeKeySelect">
-                    ` + keys.map((key) => `<option value="${key}" ${key===this.config.longitudeKey ? 'selected' : '' }>${key}
-                    </option>`).join("") + `
-                    </select>
-                </div>
-            </div>
-
-            <!-- <div class="input-fields">
-              <div>
-                  <label for="icon-img"> Icon Image </label>
-              </div>
-              <div>
-                  <input type="url">
-              </div>
-            </div> -->
-        
-            <div style="margin-top: 8px;">
-                <button id="saveButton">Save View</button>
-            </div>
-        </div>
-
-
-
-
-        <div style="position: relative;">
-            <div class="preview-card">
-
-                <div>
-                    <div id="preview-map"></div>
-                </div>
-            </div>
-        </div>
-        `;
-
-    let previewMapElement = this.shadowRoot.getElementById('preview-map');
-    
-    let previewMap = renderMapSingleLatLng(previewMapElement, lat, lng);
-    
-    var saveButton = this.shadow.getElementById("saveButton");
+    //on save update config keys
+    const saveButton = this.shadow.getElementById("saveButton");
     saveButton.addEventListener("click", () => {
       console.log("save button");
       
@@ -145,19 +71,33 @@ export class OuterbasePluginTableConfiguration extends HTMLElement {
       });
     });
 
+    
+    const previewMapElement = this.shadowRoot.getElementById('preview-map');
+    
+    // let previewMap = renderMapSingleLatLng(previewMapElement, lat, lng);
+    this.previewMap = new Map(previewMapElement);
+    this.previewMap.fitWorld();
+    tileLayer(TILE_LAYER, {
+      maxZoom: MAX_ZOOM_LEVEL,
+      attribution: ATTRIBUTION
+    }).addTo(this.previewMap);
 
-    var latitudeKeySelect = this.shadow.getElementById("latitudeKeySelect");
-    latitudeKeySelect.addEventListener("change", ()=>{
-      this.config.latitudeKey = latitudeKeySelect.value;
-      this.render();
-    });
 
-    var longitudeKeySelect = this.shadow.getElementById("longitudeKeySelect");
-    longitudeKeySelect.addEventListener("change", ()=>{
-      this.config.longitudeKey = longitudeKeySelect.value;
-      this.render();
-    })
+  }
 
+  connectedCallback() {
+    // Manually render dynamic content
+    this.render();
+  }
+
+
+
+  render() {
+    
+    
+
+
+    
   }
 
   callCustomEvent(data) {

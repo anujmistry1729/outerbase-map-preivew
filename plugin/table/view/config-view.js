@@ -101,12 +101,95 @@ templateConfiguration.innerHTML = `
         background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="28" viewBox="0 -960 960 960" width="32"><path fill="white" d="M480-380 276-584l16-16 188 188 188-188 16 16-204 204Z"/></svg>');
     }
 
+    /** Config View  */
+    .input-fields {
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+
+    label {
+        color: #777;
+    }
+
+    .field-options {
+        margin-top: 10px;
+    }
+
+    select {
+        color: 	#A9A9A9;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid #cfcfcf;
+        width: 100%;
+    }
+
+    #saveButton {
+        margin-top: 8px;
+        padding: 4px 8px;
+        border-radius: 8px;
+        border: 1px solid #111827;
+    }
+
+    #preview-map{
+      height: 185px;
+    }
+
     ${LEAFLET_JS_CSS}
 </style>
 
 <div id="theme-container">
     <div id="configuration-container">
-        
+        <!-- Config View -->
+    <div style="flex: 1;">
+
+    <div class="input-fields">
+        <div>
+            <label id="longitude-label" for="select">Longitude Key</label>
+        </div>
+        <div class="field-options">
+            <select name="" id="longitudeKeySelect">
+                
+            </select>
+        </div>
+    </div>
+
+    <div class="input-fields">
+        <div>
+            <label id="latitude-label" for="select">Latitude Key</label>
+        </div>
+        <div class="field-options">
+            <select name="" id="latitudeKeySelect">
+            
+            </select>
+        </div>
+    </div>
+
+    <!-- <div class="input-fields">
+      <div>
+          <label for="icon-img"> Icon Image </label>
+      </div>
+      <div>
+          <input type="url">
+      </div>
+    </div> -->
+
+    <div style="margin-top: 8px;">
+        <button id="saveButton">Save View</button>
+    </div>
+</div>
+
+
+
+
+<div style="position: relative;">
+    <div class="preview-card">
+
+        <div>
+            <div id="preview-map"></div>
+        </div>
+    </div>
+</div>
     </div>
 </div>
 `
