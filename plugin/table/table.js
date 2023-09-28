@@ -1,8 +1,10 @@
+import { Map, tileLayer, icon, featureGroup, marker, popup } from 'leaflet';
+import {MarkerClusterGroup} from 'leaflet.markercluster/src';
 import { OuterbasePluginConfig } from '../config';
 import { ATTRIBUTION, ICON_URL, MAX_ZOOM_LEVEL, TILE_LAYER, continentsBoundingBox } from '../constant';
 import { OuterbaseTableEvent } from '../outerbase-events';
 import { templateTable } from './view/table-view';
-import { Map, tileLayer, icon, featureGroup, marker, popup } from 'leaflet';
+
 
 export class OuterbasePluginTable extends HTMLElement {
     static get observedAttributes() {
@@ -144,8 +146,20 @@ export class OuterbasePluginTable extends HTMLElement {
         if (this.markers.length === 0) {
             this.showNoMarkersPopup();
         } else {
-            const markerGroup = featureGroup(this.markers);
-            markerGroup.addTo(this.renderedMap)
+            if(this.config.isClustering){
+                
+            const clusterMarker = new MarkerClusterGroup();
+
+            this.markers.map((singleMarker)=>{
+                clusterMarker.addLayer(singleMarker);
+            })
+
+            this.renderedMap.addLayer(clusterMarker)
+            }else{
+
+                const markerGroup = featureGroup(this.markers);
+                markerGroup.addTo(this.renderedMap)
+            }
         }
     }
 

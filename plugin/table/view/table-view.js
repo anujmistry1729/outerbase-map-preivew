@@ -1,4 +1,5 @@
 const { LEAFLET_JS_CSS } = require("../../dependency/leaflet-css");
+const { MARKER_CLUSTER_CSS, MARKER_CLUSTER_DEFAULT_CSS } = require("../../dependency/marker-cluster-css");
 
 var templateTable = document.createElement("template");
 
@@ -6,7 +7,8 @@ templateTable.innerHTML = `
 <style>
     .leaflet-control-zoom{display:none}
     ${LEAFLET_JS_CSS}
-    
+    ${MARKER_CLUSTER_CSS}
+    ${MARKER_CLUSTER_DEFAULT_CSS}
     #map{
         height: 100%;
         width: 100%;
