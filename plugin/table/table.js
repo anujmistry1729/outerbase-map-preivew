@@ -51,7 +51,6 @@ export class OuterbasePluginTable extends HTMLElement {
 
 
         this.previousPageButtonEl.addEventListener("click", (event) => {
-            console.log("Previous page button clicked");
             this.triggerEvent(this, {
                 action: OuterbaseTableEvent.getPreviousPage,
                 value: {}
@@ -59,7 +58,6 @@ export class OuterbasePluginTable extends HTMLElement {
         });
 
         this.nextPageButtonEl.addEventListener("click", (event) => {
-            console.log("Next page button clicked");
 
             this.triggerEvent(this, {
                 action: OuterbaseTableEvent.getNextPage,
@@ -74,7 +72,6 @@ export class OuterbasePluginTable extends HTMLElement {
 
 
     attributeChangedCallback(name, oldValue, newValue) {
-        console.log("attribute changed")
 
         if (name === "configuration") {
             this.config = new OuterbasePluginConfig(JSON.parse(this.getAttribute("configuration")));

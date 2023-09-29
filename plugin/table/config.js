@@ -75,7 +75,6 @@ export class OuterbasePluginTableConfiguration extends HTMLElement {
       iconURLInputEl.value = this.config.iconurl
     }
     iconURLInputEl.addEventListener("input", ()=>{
-      console.log("Input event listener", iconURLInputEl.value);
       if(iconURLInputEl.value){
         this.config.iconurl = iconURLInputEl.value;
       }
@@ -84,7 +83,6 @@ export class OuterbasePluginTableConfiguration extends HTMLElement {
 
     //save and update config keys
     saveButton.addEventListener("click", () => {
-      console.log("save button");
       console.log(this.config.toJSON())
       this.callCustomEvent({
         action: "onsave",
@@ -116,9 +114,7 @@ export class OuterbasePluginTableConfiguration extends HTMLElement {
 
     if(this.config.latitudeKey && this.config.longitudeKey){
       this.clearMarkers();
-      console.log("after clear", this.previewMarkers)
       this.addMarkers()
-      console.log("after add", this.previewMarkers)
     }
     
   }
