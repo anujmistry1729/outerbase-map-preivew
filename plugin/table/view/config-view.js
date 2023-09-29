@@ -1,8 +1,11 @@
-const { LEAFLET_JS_CSS } = require("../../dependency/leaflet-css")
-
-var templateConfiguration = document.createElement('template')
+const { LEAFLET_JS_CSS } = require("../../dependency/leaflet-css");
+const {
+  MARKER_CLUSTER_DEFAULT_CSS,
+  MARKER_CLUSTER_CSS,
+} = require("../../dependency/marker-cluster-css");
+var templateConfiguration = document.createElement("template");
 templateConfiguration.innerHTML = `
-<style>
+  <style>
     #configuration-container {
         display: flex;
         height: 100%;
@@ -77,7 +80,7 @@ templateConfiguration.innerHTML = `
 
     .preview-card > div {
         padding: 16px;
-        display: flex; 
+        display: flex;
         flex-direction: column;
         color: black;
     }
@@ -133,7 +136,7 @@ templateConfiguration.innerHTML = `
     }
 
     #preview-map{
-      height: 185px;
+      height: 200px;
     }
 
 
@@ -147,13 +150,13 @@ templateConfiguration.innerHTML = `
         height: 17px;
         margin-top: 10px;
       }
-      
-      .switch input { 
+
+      .switch input {
         opacity: 0;
         width: 0;
         height: 0;
       }
-      
+
       .slider {
         position: absolute;
         cursor: pointer;
@@ -165,7 +168,7 @@ templateConfiguration.innerHTML = `
         -webkit-transition: .4s;
         transition: .4s;
       }
-      
+
       .slider:before {
         position: absolute;
         content: "";
@@ -177,96 +180,94 @@ templateConfiguration.innerHTML = `
         -webkit-transition: .4s;
         transition: .4s;
       }
-      
+
       input:checked + .slider {
         background-color: #2196F3;
       }
-      
+
       input:focus + .slider {
         box-shadow: 0 0 1px #2196F3;
       }
-      
+
       input:checked + .slider:before {
         -webkit-transform: translateX(13px);
         -ms-transform: translateX(13px);
         transform: translateX(13px);
       }
-      
+
       /* Rounded sliders */
       .slider.round {
         border-radius: 17px;
       }
-      
+
       .slider.round:before {
         border-radius: 50%;
       }
 
     ${LEAFLET_JS_CSS}
-</style>
+    ${MARKER_CLUSTER_DEFAULT_CSS}
+    ${MARKER_CLUSTER_CSS}
+  </style>
 
-<div id="theme-container">
+  <div id="theme-container">
     <div id="configuration-container">
-        <!-- Config View -->
-    <div style="flex: 1;">
-
-    <div class="input-fields">
-        <div>
+      <!-- Config View -->
+      <div style="flex: 1;">
+        <div class="input-fields">
+          <div>
             <label id="longitude-label" for="select">Longitude Key</label>
+          </div>
+          <div class="field-options">
+            <select name="" id="longitudeKeySelect"></select>
+          </div>
         </div>
-        <div class="field-options">
-            <select name="" id="longitudeKeySelect">
-                
-            </select>
-        </div>
-    </div>
 
-    <div class="input-fields">
-        <div>
+        <div class="input-fields">
+          <div>
             <label id="latitude-label" for="select">Latitude Key</label>
+          </div>
+          <div class="field-options">
+            <select name="" id="latitudeKeySelect"></select>
+          </div>
         </div>
-        <div class="field-options">
-            <select name="" id="latitudeKeySelect">
-            
-            </select>
+
+        <div class="input-fields">
+          <label> Clustering: </label>
+          <label class="switch">
+            <input id="is-clustering" type="checkbox" />
+            <span class="slider round"></span>
+          </label>
         </div>
-    </div>
 
-    <div class="input-fields">
-        <label> Clustering: </label>
-        <label class="switch">
-        <input id="is-clustering" type="checkbox">
-        <span class="slider round"></span>
-        </label>
-    </div>
-
-    <div class="input-fields">
-        <div>
+        <div class="input-fields">
+          <div>
             <label id="icon" for="icon">Custom Icon URL: OPTIONAL</label>
+          </div>
+          <div class="field-options">
+            <input
+              name="icon"
+              id="iconURL"
+              type="url"
+              placeholder="https://icon-image.com"
+              pattern="https://.*"
+            />
+          </div>
         </div>
-        <div class="field-options">
-            <input name="icon" id="iconURL" type="url"  placeholder="https://icon-image.com" pattern="https://.*"/>
-            </input>
+
+        <div style="margin-top: 8px;">
+          <button id="saveButton">Save View</button>
         </div>
-    </div>
+      </div>
 
-    <div style="margin-top: 8px;">
-        <button id="saveButton">Save View</button>
-    </div>
-</div>
-
-
-
-
-<div style="position: relative;">
-    <div class="preview-card">
-
-        <div>
+      <div style="position: relative;">
+        <div class="preview-card">
+          <div>
             <div id="preview-map"></div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-    </div>
-</div>
-`
+  </div>
+`;
 
-module.exports = {templateConfiguration}
+module.exports = { templateConfiguration };
