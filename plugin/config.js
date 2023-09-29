@@ -14,14 +14,14 @@ export class OuterbasePluginConfig {
     latitudeKey = undefined;
     longitudeKey = undefined;
     isClustering = undefined;
-    iconURL = undefined
+    iconurl = undefined
 
 
     constructor(object) {
         this.latitudeKey = object?.latitudeKey;
         this.longitudeKey = object?.longitudeKey;
         this.isClustering = object?.isClustering;
-        this.iconURL = object?.iconURL;
+        this.iconurl = object?.iconurl;
     }
 
     toJSON() {
@@ -29,7 +29,7 @@ export class OuterbasePluginConfig {
             "latitudeKey": this.latitudeKey,
             "longitudeKey": this.longitudeKey,
             "isClustering": this.isClustering,
-            "iconURL": this.iconURL
+            "iconurl": this.iconurl
         }
     }
 }

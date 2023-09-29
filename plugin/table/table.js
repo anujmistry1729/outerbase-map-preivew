@@ -171,14 +171,22 @@ export class OuterbasePluginTable extends HTMLElement {
             return [];
         } else {
             // TODO ADD CUSTOM ICON SUPPORT
-            let myIcon = icon({
-                iconUrl: ICON_URL,
-            })
+            let markerIcon;
+            if(this.config.iconurl){
+                markerIcon = icon({
+                    iconUrl: this.config.iconurl,
+                    iconSize:[32,32]
+                })
+            }else{
+                markerIcon = icon({
+                    iconUrl: ICON_URL,
+                })
+            }
 
             return tableValue.map((singleColumnValues, index) => {
                 let lat = singleColumnValues[this.config.latitudeKey];
                 let lng = singleColumnValues[this.config.longitudeKey];
-                return marker([lat, lng], { icon: myIcon }).bindPopup(`${singleColumnValues.id}, ${lat}, ${lng}`);
+                return marker([lat, lng], { icon: markerIcon }).bindPopup(`${singleColumnValues.id}, ${lat}, ${lng}`);
             })
 
         }

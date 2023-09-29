@@ -74,6 +74,19 @@ export class OuterbasePluginTableConfiguration extends HTMLElement {
       this.render()
     })
 
+    //url input
+    const iconURLInputEl = this.shadow.querySelector("#iconURL");
+    if(this.config.iconurl){
+      iconURLInputEl.value = this.config.iconurl
+    }
+    iconURLInputEl.addEventListener("input", ()=>{
+      console.log("Input event listener", iconURLInputEl.value);
+      if(iconURLInputEl.value){
+        this.config.iconurl = iconURLInputEl.value;
+      }
+      this.render()
+    })
+
     //save and update config keys
     const saveButton = this.shadow.getElementById("saveButton");
     saveButton.addEventListener("click", () => {
