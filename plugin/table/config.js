@@ -180,7 +180,7 @@ createMarkersFromTableValue(numOfMarkers) {
         for (let index = 0; index < numOfMarkers; index++) {
           const lat = tableValue[index][this.config.latitudeKey];
           const lng = tableValue[index][this.config.longitudeKey];
-          markers.push(marker([lat, lng], { icon: markerIcon }).bindPopup(`${this.sampleData.id}, ${lat}, ${lng}`)) ;
+          markers.push(marker([lat, lng], { icon: markerIcon }).bindPopup(`<h3> ID: ${singleColumnValues.id}</h3> <h4>Latitude: ${lat}</h4> <h4>Longitude: ${lng}</h4> `)) ;
         }
 
         return markers;

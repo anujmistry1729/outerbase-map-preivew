@@ -183,7 +183,7 @@ export class OuterbasePluginTable extends HTMLElement {
             return tableValue.map((singleColumnValues, index) => {
                 let lat = singleColumnValues[this.config.latitudeKey];
                 let lng = singleColumnValues[this.config.longitudeKey];
-                return marker([lat, lng], { icon: markerIcon }).bindPopup(`${singleColumnValues.id}, ${lat}, ${lng}`);
+                return marker([lat, lng], { icon: markerIcon }).bindPopup(`<h3> ID: ${singleColumnValues.id}</h3> <h4>Latitude: ${lat}</h4> <h4>Longitude: ${lng}</h4> `);
             })
 
         }
