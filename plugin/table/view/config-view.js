@@ -45,7 +45,7 @@ templateConfiguration.innerHTML = `
         height: 40px;
         margin-bottom: 16px;
         background: transparent;
-        border: 1px solid #343438;
+        border: 1px solid #cfcfcf;
         border-radius: 8px;
         color: black;
         font-size: 14px;
