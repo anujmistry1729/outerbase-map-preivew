@@ -1,22 +1,26 @@
-import {Map, tileLayer, icon , featureGroup, marker, popup} from 'leaflet';
+import {Map, tileLayer, icon , featureGroup, marker, popup, latLng, LatLng} from 'leaflet';
 import {MarkerClusterGroup} from 'leaflet.markercluster/src';
 
 import { OuterbasePluginConfig } from "../config";
 import { templateConfiguration } from "./view/config-view";
-import { ATTRIBUTION, MAX_ZOOM_LEVEL, TILE_LAYER, continentsBoundingBox } from '../constant';
+import { ATTRIBUTION, MAX_ZOOM_LEVEL, TILE_LAYER, continentsBoundingBox, ICON_URL } from '../constant';
 export class OuterbasePluginTableConfiguration extends HTMLElement {
   static get observedAttributes() {
-    return privileges;
+    return [
+      "tablevalue",
+      "configuration"
+    ];
   }
 
   config = new OuterbasePluginConfig(JSON.parse(this.getAttribute("configuration")));
-  items = JSON.parse(this.getAttribute("tableValue"));
-  previewMarkers = [];
   clusterMarker = undefined
 
   constructor() {
     super();
     
+    this.previewMarkers = [];
+    this.config.tableValue = JSON.parse(this.getAttribute("tablevalue"))
+
     //attach shadow clone
     this.shadow = this.attachShadow({ mode: "open" });
     this.shadow.appendChild(templateConfiguration.content.cloneNode(true));
@@ -27,9 +31,19 @@ export class OuterbasePluginTableConfiguration extends HTMLElement {
     const clusteringInput = this.shadow.querySelector("#is-clustering");
     const iconURLInputEl = this.shadow.querySelector("#iconURL");
     const saveButton = this.shadow.getElementById("saveButton");
+
+    // let previewMap = renderMapSingleLatLng(previewMapElement, lat, lng);
+    this.previewMap = new Map(previewMapElement);
+    
+    this.previewMap.fitWorld();
+
+    tileLayer(TILE_LAYER, {
+      maxZoom: MAX_ZOOM_LEVEL,
+      attribution: ATTRIBUTION
+    }).addTo(this.previewMap);
     
     //get sampleData for preview
-    this.sampleData = this.items.length ? this.items[0] : {};
+    this.sampleData = this.config.tableValue.length ? this.config.tableValue[0] : {};
     this.dataKeys = Object.keys(this.sampleData);
     let lat = this.sampleData[this.config.latitudeKey];
     let lng = this.sampleData[this.config.longitudeKey];
@@ -90,17 +104,6 @@ export class OuterbasePluginTableConfiguration extends HTMLElement {
       });
     });
 
-    
-    
-    // let previewMap = renderMapSingleLatLng(previewMapElement, lat, lng);
-    this.previewMap = new Map(previewMapElement);
-    this.previewMap.fitWorld();
-    tileLayer(TILE_LAYER, {
-      maxZoom: MAX_ZOOM_LEVEL,
-      attribution: ATTRIBUTION
-    }).addTo(this.previewMap);
-
-
   }
 
   connectedCallback() {
@@ -111,7 +114,7 @@ export class OuterbasePluginTableConfiguration extends HTMLElement {
 
 
   render() {
-
+    console.log("Render condition", this.config.latitudeKey && this.config.longitudeKey)
     if(this.config.latitudeKey && this.config.longitudeKey){
       this.clearMarkers();
       this.addMarkers()
@@ -157,7 +160,7 @@ addMarkers() {
 
 //create previewMarkers from table value
 createMarkersFromTableValue(numOfMarkers) {
-    const tableValue = JSON.parse(this.getAttribute("tableValue"));
+    const tableValue = this.config.tableValue;
 
     if (tableValue.length === 0) {
         return [];
@@ -180,7 +183,10 @@ createMarkersFromTableValue(numOfMarkers) {
         for (let index = 0; index < numOfMarkers; index++) {
           const lat = tableValue[index][this.config.latitudeKey];
           const lng = tableValue[index][this.config.longitudeKey];
-          markers.push(marker([lat, lng], { icon: markerIcon }).bindPopup(`<h3> ID: ${singleColumnValues.id}</h3> <h4>Latitude: ${lat}</h4> <h4>Longitude: ${lng}</h4> `)) ;
+          console.log(lat, lng)
+          console.log(this.config)
+          const latLng = new LatLng(parseFloat(lat), parseFloat(lng))
+          markers.push(marker(latLng, { icon: markerIcon }).bindPopup(`<h3> ID: ${tableValue[index].id}</h3> <h4>Latitude: ${lat}</h4> <h4>Longitude: ${lng}</h4> `)) ;
         }
 
         return markers;

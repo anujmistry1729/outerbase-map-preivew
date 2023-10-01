@@ -1,4 +1,4 @@
-import { Map, tileLayer, icon, featureGroup, marker, popup } from 'leaflet';
+import { Map, tileLayer, icon, featureGroup, marker, popup, LatLng } from 'leaflet';
 import {MarkerClusterGroup} from 'leaflet.markercluster/src';
 import { OuterbasePluginConfig } from '../config';
 import { ATTRIBUTION, ICON_URL, MAX_ZOOM_LEVEL, TILE_LAYER, continentsBoundingBox } from '../constant';
@@ -183,7 +183,8 @@ export class OuterbasePluginTable extends HTMLElement {
             return tableValue.map((singleColumnValues, index) => {
                 let lat = singleColumnValues[this.config.latitudeKey];
                 let lng = singleColumnValues[this.config.longitudeKey];
-                return marker([lat, lng], { icon: markerIcon }).bindPopup(`<h3> ID: ${singleColumnValues.id}</h3> <h4>Latitude: ${lat}</h4> <h4>Longitude: ${lng}</h4> `);
+                const latLng = new LatLng(parseFloat(lat), parseFloat(lng))
+                return marker(latLng, { icon: markerIcon }).bindPopup(`<h3> ID: ${singleColumnValues.id}</h3> <h4>Latitude: ${lat}</h4> <h4>Longitude: ${lng}</h4> `);
             })
 
         }
