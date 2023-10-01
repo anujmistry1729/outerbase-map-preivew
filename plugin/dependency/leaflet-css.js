@@ -1,6 +1,5 @@
 export const LEAFLET_JS_CSS = `
 
-.leaflet-control-zoom{display:none}
 /* required styles */
 
 .leaflet-pane,

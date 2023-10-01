@@ -50,7 +50,7 @@ templateConfiguration.innerHTML = `
         color: black;
         font-size: 14px;
         padding: 0 8px;
-        color: #777;
+        color: #A9A9A9;
     }
 
     button {
