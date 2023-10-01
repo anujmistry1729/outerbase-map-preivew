@@ -185,7 +185,7 @@ createMarkersFromTableValue(numOfMarkers) {
           console.log(lat, lng)
           console.log(this.config)
           const latLng = new LatLng(parseFloat(lat), parseFloat(lng))
-          markers.push(marker(latLng, { icon: markerIcon }).bindPopup(`<h3> ID: ${tableValue[index].id}</h3> <h4>Latitude: ${lat}</h4> <h4>Longitude: ${lng}</h4> `)) ;
+          markers.push(marker(latLng, { icon: markerIcon }).bindPopup(`<h4>Latitude: ${lat}</h4> <h4>Longitude: ${lng}</h4> `)) ;
         }
 
         return markers;
