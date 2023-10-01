@@ -32,7 +32,6 @@ export class OuterbasePluginTableConfiguration extends HTMLElement {
     const iconURLInputEl = this.shadow.querySelector("#iconURL");
     const saveButton = this.shadow.getElementById("saveButton");
 
-    // let previewMap = renderMapSingleLatLng(previewMapElement, lat, lng);
     this.previewMap = new Map(previewMapElement);
     
     this.previewMap.fitWorld();
