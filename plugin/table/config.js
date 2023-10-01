@@ -159,7 +159,7 @@ addMarkers() {
 
 //create previewMarkers from table value
 createMarkersFromTableValue(numOfMarkers) {
-    const tableValue = this.config.tableValue;
+    const tableValue = this.config.tableValue ? this.config.tableValue : JSON.parse(this.getAttribute("tablevalue"));
 
     if (tableValue.length === 0) {
         return [];
