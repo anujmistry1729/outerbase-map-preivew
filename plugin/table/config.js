@@ -85,11 +85,14 @@ export class OuterbasePluginTableConfiguration extends HTMLElement {
 
     //url input
     if(this.config.iconurl){
+      //for render value 
       iconURLInputEl.value = this.config.iconurl
     }
     iconURLInputEl.addEventListener("input", ()=>{
       if(iconURLInputEl.value){
         this.config.iconurl = iconURLInputEl.value;
+      }else{
+        this.config.iconurl = undefined;
       }
       this.render()
     })
